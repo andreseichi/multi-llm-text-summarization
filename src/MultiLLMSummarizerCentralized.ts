@@ -4,7 +4,6 @@ import fs from "fs/promises";
 interface Summary {
   model: string;
   summary: string;
-  score?: number;
 }
 
 class MultiLLMSummarizerCentralized {

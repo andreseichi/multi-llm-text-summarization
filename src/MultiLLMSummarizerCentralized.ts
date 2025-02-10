@@ -1,4 +1,5 @@
 import { Ollama } from "ollama";
+import fs from "fs/promises";
 
 interface Summary {
   model: string;
@@ -16,6 +17,8 @@ class MultiLLMSummarizerCentralized {
   }
 
   async generateSummaries(text: string): Promise<Summary[]> {
+    console.log();
+    console.log("Gerando resumos...");
     const summaries = await Promise.all(
       this.models.map(async (model) => {
         const prompt =
@@ -27,6 +30,9 @@ class MultiLLMSummarizerCentralized {
             model,
             prompt,
           });
+
+          const filePath = `./src/results/centralized/generated-summary-${model}.txt`;
+          await fs.writeFile(filePath, response.response, "utf-8");
 
           return {
             model,
@@ -41,6 +47,9 @@ class MultiLLMSummarizerCentralized {
         }
       }),
     );
+
+    console.log("Resumos gerados e salvos!");
+
     return summaries;
   }
 
@@ -51,7 +60,7 @@ class MultiLLMSummarizerCentralized {
     const prompt =
       "Dado o texto inicial abaixo, junto com os resumos deste texto gerados por " +
       this.models.length +
-      " LLMs, por favor avalie os resumos gerados e dê o nome da LLM que tem o melhor resumo. Em uma linha separada indique o level de confiança entre 0 e 10.\nORIGINAL:\n" +
+      " LLMs, avalie os resumos gerados, dando como output o NOME da LLM que tem o melhor resumo e em uma linha separada o level de confiança entre 0 e 10.\n\nORIGINAL:\n" +
       originalText +
       "\n" +
       summaries
@@ -59,13 +68,21 @@ class MultiLLMSummarizerCentralized {
           (summary) => `RESUMO de ${summary.model}:
         ${summary.summary}`,
         )
-        .join("\n");
+        .join("\n") +
+      "\nLembre-se de dar como output apenas o nome da LLM que teve o melhor resumo e seu level de confiança entre 0 e 10";
 
     try {
+      console.log("Avaliando resumos...");
       const { response } = await this.ollama.generate({
-        model: "deepseek-r1",
+        model: "llama3.2",
         prompt,
       });
+
+      console.log(
+        "Resumos avaliados e salvo o melhor resumo, segundo a LLM classificadora!",
+      );
+      const filePath = `./src/results/centralized/evaluation.txt`;
+      await fs.writeFile(filePath, response, "utf-8");
 
       return response;
     } catch (error) {

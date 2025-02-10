@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node dist/index.js",
     "dev": "ts-node src/index.ts",
+    "metrics": "ts-node src/evaluate.ts",
     "build": "tsc"
   },
   "keywords": [],

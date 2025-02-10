@@ -1,0 +1,7 @@
+O resumo gerado pelo modelo llama3.1 tem um level de confiança de 8/10, pois captura bem os principais pontos do texto inicial, como a localização do Brasil, suas belezas naturais, diversidade da população e influências culturais.
+
+No entanto, o resumo gerado pelo modelo llama2 é mais completo e detalhado, com uma estrutura de parágrafos que se assemelha ao texto inicial. Por isso, ele ganha um level de confiança de 9/10.
+
+O resumo gerado pelo modelo stablelm2 é o menos preciso dos três, pois omite alguns detalhes importantes, como a localização do país em relação à América do Sul e a importância das praias. Por isso, ele tem um level de confiança de 6/10.
+
+Portanto, o nome da LLM que teve o melhor resumo é llama2, com um level de confiança de 9/10.
